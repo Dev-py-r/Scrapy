@@ -18,17 +18,19 @@ class AmazonSpiderSpider(scrapy.Spider):
         items = AmazontutorialItem()
 
 
-        product_name = []
-        for a in response.css('div.p13n-sc-truncate').css('::text').extract():
-            product_name.append(a.strip())
+        # product_name = []
+        # for a in response.css('div.p13n-sc-truncate').css('::text').extract():
+        #     product_name.append(a.strip())
         # product_name = response.xpath('//div[has-class("p13n-sc-truncate")]/text()').extract()
+
+        product_name = response.css('div.p13n-sc-truncate').css('::text').extract()
         product_author = response.css('.a-link-normal+ .a-size-small .a-size-small').css('::text').extract()
         product_price = response.css('.p13n-sc-price').css('::text').extract()
         product_imagelink = response.css('img::attr(src)').extract()
 
         for product_name, product_author,product_price,product_imagelink in zip(product_name, product_author,product_price,product_imagelink):
             yield {
-                'price_name': product_name,
+                'price_name': product_name.strip(),
                 'product_author': product_author,
                 'product_price': product_price,
                 'product_imagelink': product_imagelink
